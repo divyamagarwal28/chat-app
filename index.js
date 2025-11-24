@@ -1,4 +1,6 @@
-const io = require("socket.io")(8000, {
+const PORT = process.env.PORT || 8000;
+
+const io = require("socket.io")(PORT, {
     cors: {
         origin: "*",
     }
@@ -11,6 +13,7 @@ io.on("connection", (socket) => {
 
     socket.on("user-joined", (name) => {
         users[socket.id] = name;
+
         socket.broadcast.emit("receive", {
             name: "System",
             message: `${name} joined the chat`
@@ -28,3 +31,6 @@ io.on("connection", (socket) => {
         delete users[socket.id];
     });
 });
+
+console.log("Server running on port:", PORT);
+
