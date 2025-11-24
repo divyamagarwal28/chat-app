@@ -2,52 +2,59 @@ const port = process.env.PORT || 8000;
 const io = require("socket.io")(port, {
   cors: {
     origin: "*",
-    methods: ["GET", "POST"]
-  }
+    methods: ["GET", "POST"],
+  },
 });
 
-const users = {}; // store connected users
+const users = {}; // To store socket.id -> username mapping
 
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
 
-  // User joins chat
+  // Event: User joins
   socket.on("user-joined", (name) => {
     users[socket.id] = name;
 
-    // Notify everyone except the new user
-    socket.broadcast.emit("receive", {
-      name: "System",
-      message: `${name} joined the chat`
-    });
-
-    // Optional: Send welcome message to the new user
+    // Send welcome message to the joining user
     socket.emit("receive", {
       name: "System",
-      message: `Welcome ${name}!`
+      message: `Welcome ${name}!`,
     });
-  });
 
-  // User sends a message
-  socket.on("send", (message) => {
-    // Send to everyone except sender
+    // Notify everyone else
     socket.broadcast.emit("receive", {
-      message,
-      name: users[socket.id]
+      name: "System",
+      message: `${name} joined the chat`,
     });
   });
 
-  // User disconnects
+  // Event: User sends a message
+  socket.on("send", (message) => {
+    const name = users[socket.id];
+    if (!name) return; // Safety check
+
+    // Send message to all users including sender
+    io.emit("receive", {
+      name,
+      message,
+    });
+  });
+
+  // Event: User disconnects
   socket.on("disconnect", () => {
     const name = users[socket.id];
     if (name) {
-      // Notify everyone that user left
+      // Notify everyone else
       socket.broadcast.emit("receive", {
         name: "System",
-        message: `${name} left the chat`
+        message: `${name} left the chat`,
       });
+
+      // Remove from users list
       delete users[socket.id];
     }
     console.log("User disconnected:", socket.id);
   });
 });
+
+console.log(`Socket.IO server running on port ${port}`);
