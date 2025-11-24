@@ -14,14 +14,18 @@ io.on("connection", (socket) => {
 
     socket.on("user-joined", (name) => {
         users[socket.id] = name;
-        io.emit("receive", {
+
+        // Send SYSTEM message to everyone EXCEPT me
+        socket.broadcast.emit("receive", {
             name: "System",
             message: `${name} joined the chat`
         });
     });
 
     socket.on("send", (message) => {
-        io.emit("receive", {
+
+        // Send the message to everyone EXCEPT me
+        socket.broadcast.emit("receive", {
             message,
             name: users[socket.id]
         });
