@@ -1,8 +1,15 @@
+const express = require("express");
+const http = require("http");
+const { Server } = require("socket.io");
+
+const app = express();
+const server = http.createServer(app);
+
 const PORT = process.env.PORT || 8000;
 
-const io = require("socket.io")(PORT, {
+const io = new Server(server, {
     cors: {
-        origin: "*",
+        origin: "*"
     }
 });
 
@@ -32,5 +39,10 @@ io.on("connection", (socket) => {
     });
 });
 
-console.log("Server running on port:", PORT);
+app.get("/", (req, res) => {
+    res.send("Socket.io chat server running ✔");
+});
 
+server.listen(PORT, () => {
+    console.log("Server running on port:", PORT);
+});
