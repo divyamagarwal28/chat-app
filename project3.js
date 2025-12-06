@@ -29,10 +29,10 @@ export default function MyCommunity({ user, joined, onBack, onOpenChat }) {
 
             </View>
 
-            {/* TITLE */}
+            
             <Text style={styles.mainTitle}>My Communities</Text>
 
-            {/* If none joined */}
+            
             {joined.length === 0 ? (
                 <View style={styles.emptyBox}>
                     <Text style={styles.emptyText}>You haven’t joined any communities yet.</Text>
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
         padding: 20,
     },
 
-    /* HEADER */
+   
     header: {
         flexDirection: "row",
         alignItems: "center",
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
     },
 
-    /* TITLE */
+    
     mainTitle: {
         fontSize: 22,
         fontWeight: "bold",
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,
     },
 
-    /* EMPTY STATE */
+ 
     emptyBox: {
         marginTop: 50,
         alignItems: "center",
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
         marginTop: 5,
     },
 
-    /* COMMUNITY CARD */
+   
     communityCard: {
         flexDirection: "row",
         backgroundColor: "white",
