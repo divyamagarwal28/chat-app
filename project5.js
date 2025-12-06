@@ -14,10 +14,10 @@ export default function ChatWindow({ community, user, onBack }) {
   const [messages, setMessages] = useState([]);
 
   const socket = useRef(null);
-  const flatListRef = useRef(null); // Ref for FlatList
+  const flatListRef = useRef(null); 
 
   useEffect(() => {
-    // Connect to server
+    
     socket.current = io("https://chat-app-g7yp.onrender.com", {
       transports: ["websocket"],
       reconnection: true,
@@ -78,7 +78,7 @@ export default function ChatWindow({ community, user, onBack }) {
 
   return (
     <View style={styles.container}>
-      {/* HEADER */}
+      
       <View style={styles.header}>
         <TouchableOpacity onPress={onBack} style={styles.backBtn}>
           <Text style={styles.backText}>←</Text>
@@ -87,7 +87,7 @@ export default function ChatWindow({ community, user, onBack }) {
         <View style={{ width: 30 }} />
       </View>
 
-      {/* CHAT MESSAGES */}
+      
       <FlatList
         ref={flatListRef}
         data={messages}
@@ -102,7 +102,7 @@ export default function ChatWindow({ community, user, onBack }) {
         }
       />
 
-      {/* INPUT ROW */}
+  
       <View style={styles.inputRow}>
         <TextInput
           style={styles.input}
